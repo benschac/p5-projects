@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>First P5 project</title>
+        <script src="node_modules/p5/lib/p5.js"></script>
+        <script>
+            function setup() {
+                createCanvas(640, 480);
+
+            }
+
+            function draw() {
+                if(mouseIsPressed) {
+                    fill(0);
+                } else {
+                    fill(255);
+                }
+
+                ellipse(mouseX, mouseY, 80, 80);
+            }
+        </script>
+    </head>
+    <body>
+
+    </body>
+</html>
