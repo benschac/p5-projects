@@ -8,6 +8,8 @@
 
         <script>
             let font;
+            let vehicles = [];
+
            function preload() {
             font = loadFont('Buda-Light.ttf');
             }
@@ -15,12 +17,86 @@
             function setup() {
                 createCanvas(600, 300);
                 background(51);
-                textFont(font);
+                // textFont(font);
                 textSize(128);
-                fill(100);
-                noStroke();
-                text('Buddy!', 30, 200)
-            }
+                // fill(255);
+                let points = font.textToPoints("Buddy!", 30, 200);
+
+                stroke(0,255,0)
+                strokeWeight(4)
+                points.forEach((p) => {
+                    let vehicle = new Vehicle(p.x, p.y);
+                    vehicles.push(vehicle);
+                })
+            };
+
+            function draw() {
+                background(51);
+                vehicles.forEach((v) => {
+                    v.behaviors();
+                    v.update();
+                    v.show();
+                })
+            };
+
+                function Vehicle(x, y) {
+                    this.pos = createVector(random(width), random(height));
+                    this.target = createVector(x, y);
+                    this.vel = p5.Vector.random2D();
+                    this.acc = createVector();
+
+                    this.maxspeed = 2;
+                    this.maxforce = 0.5;
+                }
+
+                Vehicle.prototype.update = function() {
+                    this.pos.add(this.vel);
+                    this.vel.add(this.acc);
+                    this.acc.mult(0);
+                }
+
+                Vehicle.prototype.show = function() {
+                    stroke(255),
+                    strokeWeight(5);
+                    point(this.pos.x, this.pos.y);
+                }
+
+                Vehicle.prototype.behaviors = function(){
+                    let seek = this.seek(this.target);
+                    this.applyForce(seek);
+
+                    var mouse = createVector(mouseX, mouseY);
+                    var flee = this.flee(mouse);
+                    this.applyForce(flee);
+                }
+
+                Vehicle.prototype.applyForce = function(f){
+                    this.acc.add(f);
+                }
+
+                Vehicle.prototype.seek = function(target){
+                    let desired = p5.Vector.sub(target, this.pos);
+                    let d = desired.mag();
+                    let speed = this.maxspeed;
+                    if (d < 100){
+                        speed = map(d, 0, 100, 0, this.maxspeed)
+                    }
+                    desired.setMag(this.maxspeed);
+                    let steer = p5.Vector.sub(desired, this.vel);
+                    steer.limit(this.maxforce)
+                    return steer;
+                }
+
+                Vehicle.prototype.flee = function(target){
+                    let desired = p5.Vector.sub(target, this.pos);
+                    desired.setMag(this.maxspeed);
+                    desired.mult(-1);
+                    let steer = p5.Vector.sub(desired, this.vel);
+                    steer.limit(this.maxforce);
+                    return steer;
+                }
+
+            
         </script>
     </head>
     <body>
