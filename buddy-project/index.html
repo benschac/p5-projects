@@ -9,7 +9,7 @@
         <script>
             let font;
             let vehicles = [];
-            let msg = ["Chris", "and", "Ben", "are", "Buddies!"];
+            let msg = ["Chris", "and", "Ben", "are", "Buddy", "who", "pair"];
             let points;
             let maxPoints; 
 
@@ -22,55 +22,46 @@
             function setup() {
                 createCanvas(700, 300);
                 background(51);
-                // textFont(font);
                 textSize(128);
-                // fill(255);
+                // stroke(0,255,0)
+                // strokeWeight(1)
 
-
+                
                 points = msg.map((text) => { return font.textToPoints(text, 30, 200) })
                 maxPoints = max(points.map((p) => {return p.length}));
-                console.log(maxPoints);
+                
 
-                //let points = font.textToPoints("Chris!", 30, 200);
-
-                stroke(0,255,0)
-                strokeWeight(4)
 
                 for (var i=0; i < maxPoints; i++){
                     let vehicle = new Vehicle(random(width), random(height));
                     vehicles.push(vehicle);
                 };
-                makePoints(0);
+                // setPointTargets(0);
             };
 
             function mouseClicked() {
-
 
                 function counter() {
                     count += 1;
                     return count;
                 }   
 
-                makePoints(counter());
+                setPointTargets(count);
+                counter();
 
             };
 
-            function makePoints(index){
-
-                let m = msg[index];
+            function setPointTargets(index){
+                
                 let ps = points[index];
                 let modulus = ps.length;
-                vehicles.forEach((v, i) => {
-                    let i2 = i % modulus;
-                    let np = ps[i2]
-                    v.target = createVector(np.x, np.y)
-                }
-                )
-
+                vehicles.forEach((vehicle, i) => {
+                    let np = ps[i % modulus]
+                    vehicle.target = createVector(np.x, np.y)
+                })
             };
 
             function draw() {
-
                 background(51);
                 vehicles.forEach((v) => {
                     v.behaviors();
@@ -87,7 +78,6 @@
 
                     this.maxspeed = 2;
                     this.maxforce = 0.5;
-                    this.fleeforce = .5;
                 }
 
                 Vehicle.prototype.update = function() {
@@ -116,28 +106,29 @@
                 }
 
                 Vehicle.prototype.seek = function(target){
-                    let desired = p5.Vector.sub(target, this.pos);
-                    let d = desired.mag();
+                    let direction = p5.Vector.sub(target, this.pos);
+                    let distance = direction.mag();
                     let speed = this.maxspeed;
-                    if (d < 100){
-                        speed = map(d, 0, 100, 0, this.maxspeed)
+                    if (distance < 100){
+                        speed = map(distance, 0, 100, 0, this.maxspeed);
                     }
-                    desired.setMag(speed);
-                    let steer = p5.Vector.sub(desired, this.vel);
+                    direction.setMag(speed);
+                    let steer = p5.Vector.sub(direction, this.vel);
                     steer.limit(this.maxforce)
                     return steer;
                 }
 
                 Vehicle.prototype.flee = function(target){
-                    let desired = p5.Vector.sub(target, this.pos);
-                    let d = desired.mag();
-                    if (d < 50){
-                       desired.setMag(this.maxspeed);
-                        desired.mult(-1);
-                        let steer = p5.Vector.sub(desired, this.vel);
-                        steer.limit(this.fleeforce);
+                    let direction = p5.Vector.sub(target, this.pos);
+                    let distance = direction.mag();
+                    if (distance < 25){
+                        direction.setMag(this.maxspeed);
+                        direction.mult(-1);
+                        let steer = p5.Vector.sub(direction, this.vel);
                         return steer;
-                    } else { return createVector(0, 0)}
+                    } else { 
+                        return createVector(0, 0)
+                    }
                 }
             
         </script>
