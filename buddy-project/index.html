@@ -9,7 +9,8 @@
         <script>
             let font;
             let vehicles = [];
-            let msg = ["Chris", "is", "my", "Buddy!"];
+            let msg = ["Chris", "and", "Ben", "are", "Buddies!"];
+            let points;
             let maxPoints; 
 
             let count = 0;
@@ -19,43 +20,54 @@
             }
 
             function setup() {
-                createCanvas(600, 300);
+                createCanvas(700, 300);
                 background(51);
                 // textFont(font);
                 textSize(128);
                 // fill(255);
 
 
-                maxPoints = max(msg.map((text) => { return font.textToPoints(text, 0, 0).length }))
+                points = msg.map((text) => { return font.textToPoints(text, 30, 200) })
+                maxPoints = max(points.map((p) => {return p.length}));
+                console.log(maxPoints);
 
-                let points = font.textToPoints("Chris!", 30, 200);
+                //let points = font.textToPoints("Chris!", 30, 200);
 
                 stroke(0,255,0)
                 strokeWeight(4)
-                points.forEach((p) => {
-                    let vehicle = new Vehicle(p.x, p.y);
+
+                for (var i=0; i < maxPoints; i++){
+                    let vehicle = new Vehicle(random(width), random(height));
                     vehicles.push(vehicle);
-                })
+                };
+                makePoints(0);
             };
 
             function mouseClicked() {
+
 
                 function counter() {
                     count += 1;
                     return count;
                 }   
 
-                let index = counter();
+                makePoints(counter());
+
+            };
+
+            function makePoints(index){
 
                 let m = msg[index];
-                let newPoints = font.textToPoints(m, 30, 200);
+                let ps = points[index];
+                let modulus = ps.length;
                 vehicles.forEach((v, i) => {
-                    let np = newPoints[i]
+                    let i2 = i % modulus;
+                    let np = ps[i2]
                     v.target = createVector(np.x, np.y)
                 }
                 )
 
-            }
+            };
 
             function draw() {
 
