@@ -1,0 +1,17 @@
+Intro
+(Click) Wasn't simulating galaxies (word) great? 
+(Click) We wanted to learn about P5.js (word).
+(Click) So, we watched a Coding Train Video, and learned some interesting (word) stuff.
+(Click) Oh, before we get any further we're buddies (word).
+
+(Click) font.textToPoints(text,30,200)
+(Click) Reynolds
+(Click) Buddy
+(Click) Steering
+(Click) onClick
+(Click) Fleeing
+(Click) Buddy
+(Click) Stanley
+
+
+

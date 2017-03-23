@@ -9,7 +9,7 @@
         <script>
             let font;
             let vehicles = [];
-            let msg = ["Chris", "and", "Ben", "are", "Buddy", "who", "pair"];
+            let msg = ["galaxies","BUDDY_SYSTEM", "P5.js", "Choo-Choo", "font.textToPoints()","Reynolds_Vehicles", "Steering", "onClick","Fleeing","BUDDY_SYSTEM", "StanleyZheng", "LaCroixDrPepper", "NeverGraduate"];
             let points;
             let maxPoints; 
 
@@ -20,9 +20,9 @@
             }
 
             function setup() {
-                createCanvas(700, 300);
+                createCanvas(1200, 300);
                 background(51);
-                textSize(128);
+                textSize(100);
                 // stroke(0,255,0)
                 // strokeWeight(1)
 
@@ -76,7 +76,7 @@
                     this.vel = p5.Vector.random2D();
                     this.acc = createVector();
 
-                    this.maxspeed = 2;
+                    this.maxspeed = 5;
                     this.maxforce = 0.5;
                 }
 
