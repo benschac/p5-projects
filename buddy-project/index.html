@@ -9,9 +9,13 @@
         <script>
             let font;
             let vehicles = [];
+            let msg = ["Chris", "is", "my", "Buddy!"];
+            let maxPoints; 
+
+            let count = 0;
 
            function preload() {
-            font = loadFont('Buda-Light.ttf');
+            font = loadFont('RobotoMono-Bold.ttf');
             }
 
             function setup() {
@@ -20,7 +24,11 @@
                 // textFont(font);
                 textSize(128);
                 // fill(255);
-                let points = font.textToPoints("Buddy!", 30, 200);
+
+
+                maxPoints = max(msg.map((text) => { return font.textToPoints(text, 0, 0).length }))
+
+                let points = font.textToPoints("Chris!", 30, 200);
 
                 stroke(0,255,0)
                 strokeWeight(4)
@@ -30,7 +38,27 @@
                 })
             };
 
+            function mouseClicked() {
+
+                function counter() {
+                    count += 1;
+                    return count;
+                }   
+
+                let index = counter();
+
+                let m = msg[index];
+                let newPoints = font.textToPoints(m, 30, 200);
+                vehicles.forEach((v, i) => {
+                    let np = newPoints[i]
+                    v.target = createVector(np.x, np.y)
+                }
+                )
+
+            }
+
             function draw() {
+
                 background(51);
                 vehicles.forEach((v) => {
                     v.behaviors();
@@ -47,6 +75,7 @@
 
                     this.maxspeed = 2;
                     this.maxforce = 0.5;
+                    this.fleeforce = .5;
                 }
 
                 Vehicle.prototype.update = function() {
@@ -81,7 +110,7 @@
                     if (d < 100){
                         speed = map(d, 0, 100, 0, this.maxspeed)
                     }
-                    desired.setMag(this.maxspeed);
+                    desired.setMag(speed);
                     let steer = p5.Vector.sub(desired, this.vel);
                     steer.limit(this.maxforce)
                     return steer;
@@ -89,13 +118,15 @@
 
                 Vehicle.prototype.flee = function(target){
                     let desired = p5.Vector.sub(target, this.pos);
-                    desired.setMag(this.maxspeed);
-                    desired.mult(-1);
-                    let steer = p5.Vector.sub(desired, this.vel);
-                    steer.limit(this.maxforce);
-                    return steer;
+                    let d = desired.mag();
+                    if (d < 50){
+                       desired.setMag(this.maxspeed);
+                        desired.mult(-1);
+                        let steer = p5.Vector.sub(desired, this.vel);
+                        steer.limit(this.fleeforce);
+                        return steer;
+                    } else { return createVector(0, 0)}
                 }
-
             
         </script>
     </head>
