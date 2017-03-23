@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+         <script src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.7/p5.js"></script>
+
+        <script>
+            let font;
+           function preload() {
+            font = loadFont('Buda-Light.ttf');
+            }
+
+            function setup() {
+                createCanvas(600, 300);
+                background(51);
+                textFont(font);
+                textSize(128);
+                fill(100);
+                noStroke();
+                text('Buddy!', 30, 200)
+            }
+        </script>
+    </head>
+    <body>
+         
+    </body>
+</html>
